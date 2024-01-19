@@ -48,6 +48,7 @@ public:
 
 	void PlaceBuilding(AActor* buildingToPlace);
 
+	
 
 	ATimeManager* timeManager;
 	AGameManager* gameManager;

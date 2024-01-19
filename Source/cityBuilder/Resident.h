@@ -42,6 +42,9 @@ public:
 	UStaticMeshComponent* ResidentMesh;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Mesh")
+	UInstancedStaticMeshComponent* InstancedMesh;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Mesh")
 	UResidentLifecycle* residentLifecycle;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Mesh")

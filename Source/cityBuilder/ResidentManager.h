@@ -44,6 +44,9 @@ public:
 	void AddToUpdateRoster(AResident* resident);
 	void RemoveFromUpdateRoster(AResident *resident);
 
+
+	//void TestingLoop();
+
 	AGameManager* gameManager;
 
 	//ABuildingManager* buildingManager;

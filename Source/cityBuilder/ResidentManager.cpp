@@ -77,6 +77,13 @@ void AResidentManager::UpdateResidentManager(float deltaTime)
 	{
 		residentsToUpdate[i]->UpdateResident(deltaTime);
 	}
+
+
+
+	for (int i = 0; i < 10000; i++)
+	{
+		GetActorLocation();
+	}
 }
 
 void AResidentManager::AddToUpdateRoster(AResident* resident)
