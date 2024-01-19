@@ -5,6 +5,7 @@
 #include "buildingManager.h"
 
 #include "Resident.h"
+#include "Components/InstancedStaticMeshComponent.h"
 
 #include <Kismet/GameplayStatics.h>
 #include <Kismet/KismetMathLibrary.h>
@@ -12,47 +13,68 @@
 
 AResident::AResident()
 {
+    //InstancedMesh = CreateDefaultSubobject<UInstancedStaticMeshComponent>(TEXT("InstancedMesh"));
+    //RootComponent = InstancedMesh;
+    //
+    //static ConstructorHelpers::FObjectFinder<UStaticMesh> Mesh(TEXT("/Script/Engine.StaticMesh'/Game/StarterContent/Architecture/Pillar_50x500.Pillar_50x500'"));
+    //if (Mesh.Succeeded())
+    //{
+    //    //InstancedMesh->SetStaticMesh(Mesh.Object);
+    //}
+
+   //for (int i = 0; i < 100; i++)
+   //{
+   //    FTransform transform = GetActorTransform();
+   //    FVector loc = transform.GetLocation();
+   //    loc.X += 20.0f * (i + 1);
+   //    transform.SetLocation(loc);
+   //    
+   //    
+   //    InstancedMesh->AddInstance(transform);
+   //
+   //}
+
     //ResidentMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("ResidentMesh"));
-    ResidentMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("ResidentMesh"));
-	RootComponent = ResidentMesh;
-    static ConstructorHelpers::FObjectFinder<UStaticMesh> MeshAsset(TEXT("/Script/Engine.StaticMesh'/Game/StarterContent/Architecture/Pillar_50x500.Pillar_50x500'"));
-    if (MeshAsset.Succeeded())
-    {
-        ResidentMesh->SetStaticMesh(MeshAsset.Object);
-        UE_LOG(LogTemp, Warning, TEXT("Loaded mesh for resident!"));
-    }
-    else
-    {
-        UE_LOG(LogTemp, Warning, TEXT("Failed to load mesh for resident!"));
-    }
-    //// Set the collision profile name to "BlockAll" which blocks all channels by default
-    //ResidentMesh->SetCollisionProfileName(TEXT("BlockAll"));
-    ResidentMesh->SetGenerateOverlapEvents(true);
-
-    //// Alternatively, set up individual collision responses
-    //ResidentMesh->BodyInstance.SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
-    //ResidentMesh->SetNotifyRigidBodyCollision(true); // To get hit events
-    //ResidentMesh->BodyInstance.SetResponseToAllChannels(ECollisionResponse::ECR_Block); // Block all channels
-    //ResidentMesh->BodyInstance.SetResponseToChannel(ECollisionChannel::ECC_Camera, ECollisionResponse::ECR_Ignore); // Ignore camera
-
-    //// Enable physics simulation if needed
-    ////StaticMeshComponent->SetSimulatePhysics(true);
-    //// In your actor's BeginPlay or constructor
-    //ResidentMesh->OnComponentHit.AddDynamic(this, &AResident::OnHit);
-
-     // Initialize the TriggerBox component
-    TriggerBox = CreateDefaultSubobject<UBoxComponent>(TEXT("TriggerBox"));
-    // Set the box component to trigger overlap events
-    TriggerBox->SetGenerateOverlapEvents(true);
-    TriggerBox->SetCollisionProfileName(TEXT("Trigger"));
-    UStaticMesh* meshSize = ResidentMesh->GetStaticMesh();
-    //meshSize->GetBounds().BoxExtent;
-    TriggerBox->InitBoxExtent(meshSize->GetBounds().BoxExtent); // Set the size as needed
-    // Attach the TriggerBox to the ResidentMesh
-    TriggerBox->SetupAttachment(ResidentMesh);
-    // Bind the overlap event
-    TriggerBox->OnComponentBeginOverlap.AddDynamic(this, &AResident::OnOverlapBegin);
-
+   // ResidentMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("ResidentMesh"));
+//	RootComponent = ResidentMesh;
+   // static ConstructorHelpers::FObjectFinder<UStaticMesh> MeshAsset(TEXT("/Script/Engine.StaticMesh'/Game/StarterContent/Architecture/Pillar_50x500.Pillar_50x500'"));
+   // if (MeshAsset.Succeeded())
+   // {
+   //     ResidentMesh->SetStaticMesh(MeshAsset.Object);
+   //     UE_LOG(LogTemp, Warning, TEXT("Loaded mesh for resident!"));
+   // }
+   // else
+   // {
+   //     UE_LOG(LogTemp, Warning, TEXT("Failed to load mesh for resident!"));
+   // }
+   // // Set the collision profile name to "BlockAll" which blocks all channels by default
+   // ResidentMesh->SetCollisionProfileName(TEXT("BlockAll"));
+   // ResidentMesh->SetGenerateOverlapEvents(true);
+   //
+   // // Alternatively, set up individual collision responses
+   // ResidentMesh->BodyInstance.SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+   // ResidentMesh->SetNotifyRigidBodyCollision(true); // To get hit events
+   // ResidentMesh->BodyInstance.SetResponseToAllChannels(ECollisionResponse::ECR_Block); // Block all channels
+   // ResidentMesh->BodyInstance.SetResponseToChannel(ECollisionChannel::ECC_Camera, ECollisionResponse::ECR_Ignore); // Ignore camera
+   //
+   // // Enable physics simulation if needed
+   // //StaticMeshComponent->SetSimulatePhysics(true);
+   // // In your actor's BeginPlay or constructor
+   // //ResidentMesh->OnComponentHit.AddDynamic(this, &AResident::OnHit);
+   //
+   //  // Initialize the TriggerBox component
+   //TriggerBox = CreateDefaultSubobject<UBoxComponent>(TEXT("TriggerBox"));
+   //// Set the box component to trigger overlap events
+   //TriggerBox->SetGenerateOverlapEvents(true);
+   //TriggerBox->SetCollisionProfileName(TEXT("Trigger"));
+   //UStaticMesh* meshSize = ResidentMesh->GetStaticMesh();
+   ////meshSize->GetBounds().BoxExtent;
+   //TriggerBox->InitBoxExtent(meshSize->GetBounds().BoxExtent); // Set the size as needed
+   //// Attach the TriggerBox to the ResidentMesh
+   //TriggerBox->SetupAttachment(ResidentMesh);
+   //// Bind the overlap event
+   //TriggerBox->OnComponentBeginOverlap.AddDynamic(this, &AResident::OnOverlapBegin);
+   
     inQueueTimer = 0.0f;
 
     residentLifecycle = CreateDefaultSubobject<UResidentLifecycle>("ResidentLifecycleComponent");
@@ -135,7 +157,7 @@ void AResident::UpdateResident(float deltaTime)
 
                 MoveResidentToPlace(actorToMoveTo, deltaTime);
 
-                FVector CurrentActorLocation = GetActorLocation();
+              //  FVector CurrentActorLocation = GetActorLocation();
                 //FVector actorToMoveToLocation = actorToMoveTo->GetActorLocation();
                // FRotator LookAtRotation = UKismetMathLibrary::FindLookAtRotation(CurrentActorLocation, actorToMoveToLocation);
 
